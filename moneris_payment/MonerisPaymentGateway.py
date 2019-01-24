@@ -76,13 +76,13 @@ class mpgHttpsPost:
 		return errorResponse
 
 	def _getUrl(self):
-		if PaymentSettings.country=="Canada" and PaymentSettings.test_mode==1:
+		if PaymentSettings.country=="Canada" and PaymentSettings.test_mode=="Test":
 			return "https://esqa.moneris.com:443/gateway2/servlet/MpgRequest"
-		elif PaymentSettings.country=="Canada"and PaymentSettings.test_mode==0:
+		elif PaymentSettings.country=="Canada"and PaymentSettings.test_mode=="Live":
 			return "https://www3.moneris.com:443/gateway2/servlet/MpgRequest"
-		elif PaymentSettings.country=="United States" and PaymentSettings.test_mode==1:
+		elif PaymentSettings.country=="United States" and PaymentSettings.test_mode=="Test":
 			return "https://esplusqa.moneris.com:443/gateway_us/servlet/MpgRequest"
-		elif PaymentSettings.country=="United States" and PaymentSettings.test_mode==0:
+		elif PaymentSettings.country=="United States" and PaymentSettings.test_mode=="Live":
 			return "https://esplus.moneris.com:443/gateway_us/servlet/MpgRequest"
 		return "" 
 
