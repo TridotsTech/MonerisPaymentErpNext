@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include moneris_payment *.css
+recursive-include moneris_payment *.csv
+recursive-include moneris_payment *.html
+recursive-include moneris_payment *.ico
+recursive-include moneris_payment *.js
+recursive-include moneris_payment *.json
+recursive-include moneris_payment *.md
+recursive-include moneris_payment *.png
+recursive-include moneris_payment *.py
+recursive-include moneris_payment *.svg
+recursive-include moneris_payment *.txt
+recursive-exclude moneris_payment *.pyc
