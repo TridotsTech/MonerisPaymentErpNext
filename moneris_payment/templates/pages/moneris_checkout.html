@@ -1,0 +1,215 @@
+<!-- <div class="page-card">
+	<div class="page-card-head">
+				<span data-text="Card Details">Card Details</span>
+			</div>
+			<form>			<div class="form-group" id="card-number-field">
+    <input type="number" maxlength="18" class="form-control" id="card-number" placeholder="Card Number" required="" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+  </div>
+  <div class="form-group">
+   
+    <select class="form-control" style="width:45%;float: left;    margin-bottom: 15px;">
+    	<option value="01">01</option>
+    	<option value="02">02</option>
+    	<option value="03">03</option>
+    	<option value="04">04</option>
+    	<option value="05">05</option>
+    	<option value="06">06</option>
+    	<option value="07">07</option>
+    	<option value="08">08</option>
+    	<option value="09">09</option>
+    	<option value="10">10</option>
+    	<option value="11">11</option>
+    	<option value="12">11</option>
+    </select>
+    <select class="form-control" style="width:45%;margin-left: 10%;float: left;">
+    	<option value="2019">2019</option>
+    	<option value="2020">2020</option>
+    	<option value="2021">2021</option>
+    	<option value="2022">2022</option>
+    	<option value="2023">2023</option>
+    	<option value="2024">2024</option>
+    	<option value="2025">2025</option>
+    	<option value="2026">2026</option>
+    	<option value="2027">2027</option>
+    	<option value="2028">2028</option>
+    	<option value="2029">2029</option>
+    	<option value="2030">2030</option>
+    </select>
+  </div>
+  	<div class="form-group">
+     
+    <input type="number" maxlength="4" class="form-control" id="card-cvv"  placeholder="CVV" required="" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+  </div>
+  <button class="btn btn-sm btn-primary" type="submit" style="width:100%;font-size: 15px;">
+				Pay</button>
+				</form>
+
+</div>
+ 
+<style type="text/css">
+.page-card-head
+	{
+		
+    font-size: 15px;
+    font-weight: bold;
+    
+	}
+	
+	label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+ input[type="number"]::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="number"] {
+-moz-appearance: textfield;
+}
+</style> -->
+
+{% extends "templates/web.html" %}
+
+{% block title %} Payment {% endblock %}
+
+{%- block header -%}
+{% endblock %}
+
+{% block script %}
+
+<script>{% include "templates/includes/integrations/moneris.payform.min.js" %}</script>
+<script>{% include "templates/includes/integrations/moneris-payment-script.js" %}</script>
+{% endblock %}
+
+{%- block page_content -%}
+
+<div class="page-card" >
+    <div class="col-sm-12 page-box">
+        {% if image %}
+            <img src={{image}}>
+        {% endif %}
+        <div style="width: 66%;margin: 0 auto;">
+<h2 class="text-center" style="margin-top: 0;margin-bottom: 15px; float: left;">{{description}}</h2></div>
+       
+        <form id="payment-form">
+            <input type="hidden" value="{{order_id}}" id="PaymentRequestId">
+            <input type="hidden" value="{{amount}}" id="PaymentAmount">
+            <div class="form-row">
+                <div class="form-group" id="card-number-field">
+    <input type="text"   class="form-control" id="card-number" placeholder="Card Number" required="" >
+  </div>
+  <div class="form-group">
+   
+    <select class="form-control" id="card-exp-month" style="width:45%;float: left;    margin-bottom: 15px;">
+        <option value="01">01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+        <option value="06">06</option>
+        <option value="07">07</option>
+        <option value="08">08</option>
+        <option value="09">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">11</option>
+    </select>
+    <select class="form-control" id="card-exp-year" style="width:45%;margin-left: 10%;float: left;">
+        <option value="18">2018</option>
+        <option value="19">2019</option>
+        <option value="20">2020</option>
+        <option value="21">2021</option>
+        <option value="22">2022</option>
+        <option value="23">2023</option>
+        <option value="24">2024</option>
+        <option value="25">2025</option>
+        <option value="26">2026</option>
+        <option value="27">2027</option>
+        <option value="28">2028</option>
+        <option value="29">2029</option>
+        <option value="30">2030</option>
+    </select>
+  </div>
+    <div class="form-group">
+     
+    <input type="number" maxlength="4" class="form-control" id="card-cvv"  placeholder="CVV" required="" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+  </div>
+              
+
+            </div>
+            <div class="error">
+
+            </div>
+             <div class="success">
+                {{ _("Your payment has been successfully registered.") }}
+            </div>
+            <button class="btn btn-sm btn-primary" id="confirm-purchase" type="submit" style="width:100%;font-size: 15px;">
+                {{_('Pay')}} {{amount}}</button>
+            
+           
+        </form>
+    </div>
+</div>
+<style type="text/css">
+.page-card {
+    max-width: 360px;
+    padding: 0;
+    margin: 0 auto;
+    border: none;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: none;
+}
+.page-box
+{
+    margin: 70px auto;
+    border: 1px solid #d1d8dd;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+.error
+{
+    display: none;
+    color: red;
+}
+.success
+{
+    display: none;
+    margin-bottom: 15px;
+    color: green;
+}
+.page-card-head
+    {
+        
+    font-size: 15px;
+    font-weight: bold;
+    
+    }
+    
+    label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+.page-card .btn
+{
+    margin-top: 0;
+}
+
+ input[type="number"]::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="number"] {
+-moz-appearance: textfield;
+}
+</style>
+
+{% endblock %}

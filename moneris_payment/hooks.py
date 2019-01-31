@@ -120,3 +120,6 @@ app_license = "MIT"
 # 	"frappe.desk.doctype.event.event.get_events": "moneris_payment.event.get_events"
 # }
 
+website_route_rules = [
+	{"from_route": "/payment-success", "to_route": "payment_success"}
+]
