@@ -23,7 +23,7 @@ class MonerisSettings(Document):
 		if currency not in self.supported_currencies:
 			frappe.throw(_("Please select another payment method. Moneris does not support transactions in currency '{0}'").format(currency))
    	def on_update(self):
-		create_payment_gateway('Moneris', settings='Moneris Settings')
+		create_payment_gateway('Moneris')
 
 	def create_request(self, data):
 		try:
