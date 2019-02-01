@@ -126,6 +126,7 @@ class MonerisSettings(Document):
 					"TransDate" : resp.getTransDate(),
 					"TransType" : resp.getTransType(),
 					"Complete" : resp.getComplete(),
+					"status" : resp.getComplete(),
 					"Message" : resp.getMessage(),
 					"TransAmount" : resp.getTransAmount(),
 					"CardType" : resp.getCardType(),
