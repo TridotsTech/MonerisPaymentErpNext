@@ -22,11 +22,12 @@ class MonerisSettings(Document):
 	def validate_transaction_currency(self, currency):
 		if currency not in self.supported_currencies:
 			frappe.throw(_("Please select another payment method. Moneris does not support transactions in currency '{0}'").format(currency))
+   	def on_update(self):
+		create_payment_gateway('Moneris', settings='Moneris Settings')
 
 	def create_request(self, data):
 		try:
 			from moneris_payment.MonerisPaymentGateway import *
-			
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
