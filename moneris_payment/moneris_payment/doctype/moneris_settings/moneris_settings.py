@@ -225,7 +225,8 @@ class MonerisSettings(Document):
 
 def get_gateway_controller(doctype, docname):
 	reference_doc = frappe.get_doc(doctype, docname)
-	gateway_controller = frappe.db.get_value("Payment Gateway", reference_doc.payment_gateway, "gateway_controller")
+	# gateway_controller = frappe.db.get_value("Payment Gateway", reference_doc.payment_gateway, "gateway_controller")
+	gateway_controller="moneris_settings"
 	return gateway_controller
 
 
