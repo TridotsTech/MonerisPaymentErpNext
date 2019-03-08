@@ -105,37 +105,93 @@ class MonerisSettings(Document):
 				for item in sale_order_items:
 					customer.addItem(Item(item.item_name[:45],str(item.qty),item.item_code.split(':')[0],str(item.rate)))
 
+				data_key=''
+				if data.get('data_key'):
+					if data.get('data_key')!='':
+						data_key=data.get('data_key')
 
+				if data_key=='':
+					vault = Vault(pan, expiry_date ,shipping_info.phone, frappe.session.user,frappe.session.user, "7")	
+					VautObject=mpgHttpsPost(vault)
+					VautObject.postRequest()
+					valutResp = VautObject.getResponse()
+					if valutResp.getComplete()=="true":
+						data_key=valutResp.getDataKey()
+						frappe.get_doc({
+										"doctype":"Moneris Vault",
+										"user_id":frappe.session.user,
+										"data_key":valutResp.getDataKey(),
+										"pan":valutResp.getResMaskedPan(),
+										"expiry":valutResp.getResExpdate(),
+										 "card_type":cardType(pan),
+										}).insert(ignore_permissions=True)
+						
 				#Purchase 
-
-				purchase = Purchase(order_id, amount , pan, expiry_date, crypt)
-				purchase.setCustInfo(customer)
-				MSGObject=mpgHttpsPost(purchase)
-				MSGObject.postRequest()
+				if data_key!='':
+					purchase = PurchaseWithVault(data_key,order_id,amount,'1')
+					purchase.setCustId(frappe.session.user)
+					purchase.setCustInfo(customer)
+					MSGObject=mpgHttpsPost(purchase)
+					print(MSGObject)
+					MSGObject.postRequest()
+					# #Response
+					resp = MSGObject.getResponse()
+					if resp.getComplete()=="true":
+						self.integration_request.db_set('status', 'Completed', update_modified=False)
+						self.flags.status_changed_to = "Completed"
+						return self.finalize_request(data.get('payment_request_id'),str(resp.getTransID()),str(resp.getTransDate()))
+					else:
+						return {"ReceiptId" : resp.getReceiptId(),
+							"ReferenceNum" :resp.getReferenceNum(),
+							"ResponseCod" : resp.getResponseCode(),
+							"AuthCode" : resp.getAuthCode(),
+							"TransTime" : resp.getTransTime(),
+							"TransDate" : resp.getTransDate(),
+							"TransType" : resp.getTransType(),
+							"Complete" : resp.getComplete(),
+							"status" : resp.getComplete(),
+							"Message" : resp.getMessage(),
+							"TransAmount" : resp.getTransAmount(),
+							"CardType" : resp.getCardType(),
+							"TransID" : resp.getTransID(),
+							"TimedOut" : resp.getTimedOut(),
+							"BankTotals" : resp.getBankTotals(),
+							"Ticket" : resp.getTicket()}
 				
-				#Response
-				resp = MSGObject.getResponse()
-				if resp.getComplete()=="true":
-					self.integration_request.db_set('status', 'Completed', update_modified=False)
-					self.flags.status_changed_to = "Completed"
-					return self.finalize_request(data.get('payment_request_id'),str(resp.getTransID()),str(resp.getTransDate()))
-				else:
-					return {"ReceiptId" : resp.getReceiptId(),
-						"ReferenceNum" :resp.getReferenceNum(),
-						"ResponseCod" : resp.getResponseCode(),
-						"AuthCode" : resp.getAuthCode(),
-						"TransTime" : resp.getTransTime(),
-						"TransDate" : resp.getTransDate(),
-						"TransType" : resp.getTransType(),
-						"Complete" : resp.getComplete(),
-						"status" : resp.getComplete(),
-						"Message" : resp.getMessage(),
-						"TransAmount" : resp.getTransAmount(),
-						"CardType" : resp.getCardType(),
-						"TransID" : resp.getTransID(),
-						"TimedOut" : resp.getTimedOut(),
-						"BankTotals" : resp.getBankTotals(),
-						"Ticket" : resp.getTicket()}
+				# purchase = Purchase(order_id, amount , pan, expiry_date, crypt)
+				# purchase.setCustInfo(customer)
+				# MSGObject=mpgHttpsPost(purchase)
+				# MSGObject.postRequest()
+				
+				# #Response
+				# resp = MSGObject.getResponse()
+				# if resp.getComplete()=="true":
+				# 	self.integration_request.db_set('status', 'Completed', update_modified=False)
+				# 	self.flags.status_changed_to = "Completed"
+				# 	return self.finalize_request(data.get('payment_request_id'),str(resp.getTransID()),str(resp.getTransDate()))
+				# else:
+				# 	return {"ReceiptId" : resp.getReceiptId(),
+				# 		"ReferenceNum" :resp.getReferenceNum(),
+				# 		"ResponseCod" : resp.getResponseCode(),
+				# 		"AuthCode" : resp.getAuthCode(),
+				# 		"TransTime" : resp.getTransTime(),
+				# 		"TransDate" : resp.getTransDate(),
+				# 		"TransType" : resp.getTransType(),
+				# 		"Complete" : resp.getComplete(),
+				# 		"status" : resp.getComplete(),
+				# 		"Message" : resp.getMessage(),
+				# 		"TransAmount" : resp.getTransAmount(),
+				# 		"CardType" : resp.getCardType(),
+				# 		"TransID" : resp.getTransID(),
+				# 		"TimedOut" : resp.getTimedOut(),
+				# 		"BankTotals" : resp.getBankTotals(),
+				# 		"Ticket" : resp.getTicket()}
+				# else:
+				# 	return {
+				# 		"redirect_to": "payment-failed",
+				# 		"status": "failed"
+				# 	}
+
 			else:
 				return {
 						"redirect_to": "payment-failed",
@@ -238,3 +294,29 @@ def get_gateway_controller(doctype, docname):
 	return gateway_controller
 
 
+def cardType(number):
+    number = str(number)
+    cardtype = ""
+    if len(number) == 15:
+        if number[:2] == "34" or number[:2] == "37":
+            cardtype = "American Express"
+    if len(number) == 13:
+        if number[:1] == "4":
+            cardtype = "Visa"
+    if len(number) == 16:
+        if number[:4] == "6011":
+            cardtype = "Discover"
+        if int(number[:2]) >= 51 and int(number[:2]) <= 55:
+            cardtype = "Master Card"
+        if number[:1] == "4":
+            cardtype = "Visa"
+        if number[:4] == "3528" or number[:4] == "3529":
+            cardtype = "JCB"
+        if int(number[:3]) >= 353 and int(number[:3]) <= 359:
+            cardtype = "JCB"
+    if len(number) == 14:
+        if number[:2] == "36":
+            cardtype = "DINERS"
+        if int(number[:3]) >= 300 and int(number[:3]) <= 305:
+            cardtype = "DINERS"
+    return cardtype

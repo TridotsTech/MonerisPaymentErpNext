@@ -20,10 +20,42 @@
         {% if image %}
             <img src={{image}}>
         {% endif %}
+
         <div style="width: 66%;margin: 0 auto;">
 <h2 class="text-center" style="margin-top: 0;margin-bottom: 15px; float: left;">{{description}}</h2></div>
-       
-        <form id="payment-form">
+   
+   <div class="col-md-12">
+    <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" checked="" value="exist">
+        <label>Pay with</label>
+    </div>
+     <div id="existing-cards" style="{%if customercards | length == 0%}display:none{%endif%}">
+       <ul>
+    {%for cardinfo in customercards%}
+ 
+        <li data-key="{{cardinfo.data_key}}"><a class="cardinfo">
+            {%if cardinfo.card_type=="Visa"%}
+            <img src="/assets/moneris_payment/images/visa.png" class="card-image" />
+            {%endif%}
+             {%if cardinfo.card_type=="Master Card"%}
+            <img src="/assets/moneris_payment/images/master.png" class="card-image" />
+            {%endif%}
+             {%if cardinfo.card_type=="Discover"%}
+            <img src="/assets/moneris_payment/images/discover.png" class="card-image" />
+            {%endif%}
+             {%if cardinfo.card_type=="American Express"%}
+            <img src="/assets/moneris_payment/images/american.png" class="card-image" />
+            {%endif%}
+            <span class="card-no">{{cardinfo.pan}}</span>
+            <span class="card-exp">{{cardinfo.expiry}}</span>
+        </a></li>
+    
+    {%endfor%}
+    </ul>
+   </div> 
+     <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" value="new">
+        <label>New Card</label>
+    </div>
+    <form id="payment-form" style="{%if customercards | length >0%}display:none{%endif%}">
             <input type="hidden" value="{{order_id}}" id="PaymentRequestId">
             <div class="form-row">
                 <div class="form-group" id="card-number-field">
@@ -79,9 +111,62 @@
             
            
         </form>
+   </div>   
+
+
     </div>
 </div>
+<div class="submit-loading">
+    <img src="/assets/moneris_payment/images/loading.gif" />
+    <br/>Loading...
+</div>
 <style type="text/css">
+.submit-loading
+{
+
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    padding-top: 20%;
+    color: #fff;
+    display: none;
+
+}
+.card-image
+{
+    float: left;
+    width: 60px;
+}
+#existing-cards ul li {
+    list-style: none;
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-top: 5px;
+    float: left;
+    width: 100%;
+}
+#existing-cards {
+    float: left;
+    width: 100%;
+}
+#existing-cards ul {
+    float: left;
+    width: 100%;
+    padding-left: 15px;
+}
+span.card-no, .card-exp {
+   float: left;
+    width: calc(100% - 75px);
+    font-weight: 600;
+    margin-left: 10px;
+    margin-top: -5px;
+    font-size: 14px;
+}
 .page-card {
     max-width: 360px;
     padding: 0;
