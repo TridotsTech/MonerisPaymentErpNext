@@ -103,7 +103,7 @@ class MonerisSettings(Document):
 				# Product Items
 
 				for item in sale_order_items:
-					customer.addItem(Item(item.item_name[:45],str(item.qty),item.item_code.split(':')[0],str(item.rate)))
+					customer.addItem(Item(item.item_name[:45],str(item.qty),item.item_code[:45].split(':')[0],str(item.rate)))
 
 				data_key=''
 				if data.get('data_key'):

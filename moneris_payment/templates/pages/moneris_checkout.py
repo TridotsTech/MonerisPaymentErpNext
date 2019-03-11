@@ -33,6 +33,7 @@ def get_context(context):
 			_('Looks like someone sent you to an incomplete URL. Please ask them to look into it.'))
 			frappe.local.flags.redirect_location = frappe.local.response.location
 			raise frappe.Redirect
+		context.reference_docname=frappe.form_dict['order_id']
 		context.customercards=frappe.db.get_all("Moneris Vault",fields={'*'},filters={"user_id":frappe.session.user},order_by="creation desc")
 		gateway_controller = get_gateway_controller(context.reference_doctype, context.reference_docname)
 		context.publishable_key = get_api_key(context.reference_docname, gateway_controller)

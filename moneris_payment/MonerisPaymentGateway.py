@@ -62,6 +62,7 @@ class mpgHttpsPost:
 
 	def __toXml(self):
 		request = "<request>" + "<store_id>" + self.__storeId + "</store_id>" + "<api_token>" + self.__apiToken + "</api_token>" + self.__statusCheckXml() + self.__trxn.toXml() + "</request>"
+		print(request)
 		return request
 
 	def __GlobalError(self, error):

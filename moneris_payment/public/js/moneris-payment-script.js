@@ -99,7 +99,7 @@ $(function() {
                        method: "moneris_payment.templates.pages.moneris_checkout.make_payment",
                         args: {
                             data:JSON.stringify(monerisdata),
-                            reference_doctype: "{{ reference_doctype }}",
+                            reference_doctype: "Payment Request",
                             reference_docname: "{{ reference_docname }}"
                         },
                        callback: function(Response) {
@@ -132,7 +132,7 @@ $(function() {
                        method: "moneris_payment.templates.pages.moneris_checkout.make_payment",
                         args: {
                             data:JSON.stringify(monerisdata),
-                            reference_doctype: "{{ reference_doctype }}",
+                            reference_doctype: "Payment Request",
                             reference_docname: "{{ reference_docname }}"
                         },
                        callback: function(Response) {
