@@ -100,7 +100,7 @@ $(function() {
                         args: {
                             data:JSON.stringify(monerisdata),
                             reference_doctype: "Payment Request",
-                            reference_docname: "{{ reference_docname }}"
+                            reference_docname: $("#PaymentRequestId").val()
                         },
                        callback: function(Response) {
                         if(Response.message.status=="Completed")
@@ -133,7 +133,7 @@ $(function() {
                         args: {
                             data:JSON.stringify(monerisdata),
                             reference_doctype: "Payment Request",
-                            reference_docname: "{{ reference_docname }}"
+                            reference_docname: $("#PaymentRequestId").val()
                         },
                        callback: function(Response) {
                         if(Response.message.status=="Completed")
