@@ -22,7 +22,7 @@ class MonerisSettings(Document):
 	def validate_transaction_currency(self, currency):
 		if currency not in self.supported_currencies:
 			frappe.throw(_("Please select another payment method. Moneris does not support transactions in currency '{0}'").format(currency))
-   	def on_update(self):
+	def on_update(self):
 		create_payment_gateway('Moneris')
 
 	def create_request(self, data):
@@ -214,21 +214,21 @@ class MonerisSettings(Document):
 				MSGObject.postRequest()
 				resp = MSGObject.getResponse()
 				respobj={"ReceiptId" : resp.getReceiptId(), 
-		 		"ReferenceNum" : resp.getReferenceNum(), 
-		 		"ResponseCode" : resp.getResponseCode(), 
-		 		"AuthCode" : resp.getAuthCode(), 
-		 		"TransTime" : resp.getTransTime(), 
-		 		"TransDate" : resp.getTransDate(), 
-		 		"TransType" : resp.getTransType(), 
-		 		"Complete" : resp.getComplete(), 
-		 		"Message" : resp.getMessage(), 
-		 		"TransAmount" : resp.getTransAmount(), 
-		 		"CardType" : resp.getCardType(), 
-		 		"TransID" : resp.getTransID(), 
-		 		"TimedOut" : resp.getTimedOut(), 
-		 		"BankTotals" : resp.getBankTotals(), 
-		 		"Ticket" : resp.getTicket()}
-		 		print(respobj)
+				"ReferenceNum" : resp.getReferenceNum(), 
+				"ResponseCode" : resp.getResponseCode(), 
+				"AuthCode" : resp.getAuthCode(), 
+				"TransTime" : resp.getTransTime(), 
+				"TransDate" : resp.getTransDate(), 
+				"TransType" : resp.getTransType(), 
+				"Complete" : resp.getComplete(), 
+				"Message" : resp.getMessage(), 
+				"TransAmount" : resp.getTransAmount(), 
+				"CardType" : resp.getCardType(), 
+				"TransID" : resp.getTransID(), 
+				"TimedOut" : resp.getTimedOut(), 
+				"BankTotals" : resp.getBankTotals(), 
+				"Ticket" : resp.getTicket()}
+				print(respobj)
 	
 
 	def finalize_request(self,payment_request_id,transactionid,transactiondate):
@@ -295,28 +295,28 @@ def get_gateway_controller(doctype, docname):
 
 
 def cardType(number):
-    number = str(number)
-    cardtype = ""
-    if len(number) == 15:
-        if number[:2] == "34" or number[:2] == "37":
-            cardtype = "American Express"
-    if len(number) == 13:
-        if number[:1] == "4":
-            cardtype = "Visa"
-    if len(number) == 16:
-        if number[:4] == "6011":
-            cardtype = "Discover"
-        if int(number[:2]) >= 51 and int(number[:2]) <= 55:
-            cardtype = "Master Card"
-        if number[:1] == "4":
-            cardtype = "Visa"
-        if number[:4] == "3528" or number[:4] == "3529":
-            cardtype = "JCB"
-        if int(number[:3]) >= 353 and int(number[:3]) <= 359:
-            cardtype = "JCB"
-    if len(number) == 14:
-        if number[:2] == "36":
-            cardtype = "DINERS"
-        if int(number[:3]) >= 300 and int(number[:3]) <= 305:
-            cardtype = "DINERS"
-    return cardtype
+	number = str(number)
+	cardtype = ""
+	if len(number) == 15:
+		if number[:2] == "34" or number[:2] == "37":
+			cardtype = "American Express"
+	if len(number) == 13:
+		if number[:1] == "4":
+			cardtype = "Visa"
+	if len(number) == 16:
+		if number[:4] == "6011":
+			cardtype = "Discover"
+		if int(number[:2]) >= 51 and int(number[:2]) <= 55:
+			cardtype = "Master Card"
+		if number[:1] == "4":
+			cardtype = "Visa"
+		if number[:4] == "3528" or number[:4] == "3529":
+			cardtype = "JCB"
+		if int(number[:3]) >= 353 and int(number[:3]) <= 359:
+			cardtype = "JCB"
+	if len(number) == 14:
+		if number[:2] == "36":
+			cardtype = "DINERS"
+		if int(number[:3]) >= 300 and int(number[:3]) <= 305:
+			cardtype = "DINERS"
+	return cardtype
