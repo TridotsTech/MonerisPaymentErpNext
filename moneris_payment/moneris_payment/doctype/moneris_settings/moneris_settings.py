@@ -197,7 +197,7 @@ class MonerisSettings(Document):
 						"redirect_to": "payment-failed",
 						"status": "failed"
 					}
-		except Exception,e:
+		except Exception as e:
 			print(e)
 			return e
 
