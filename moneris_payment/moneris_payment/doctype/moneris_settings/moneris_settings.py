@@ -27,7 +27,7 @@ class MonerisSettings(Document):
 
 	def create_request(self, data):
 		try:
-			from moneris_payment.MonerisPaymentGateway import *
+			from moneris_payment import *
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
