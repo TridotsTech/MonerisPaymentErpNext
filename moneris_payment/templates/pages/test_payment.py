@@ -81,7 +81,7 @@ def make_payment():
 				"TimedOut" : resp.getTimedOut(),
 				"BankTotals" : resp.getBankTotals(),
 				"Ticket" : resp.getTicket()}
-	except Exception,e:
+	except Exception as e:
 		print(e)
 		return e
 

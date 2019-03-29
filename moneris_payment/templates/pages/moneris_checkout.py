@@ -178,7 +178,7 @@ def make_payment(data,reference_doctype,reference_docname):
 		data =  frappe.get_doc("Moneris Settings", gateway_controller).create_request(data)
 		frappe.db.commit()
 		return data
-	except Exception,e:
+	except Exception as e:
 		print(e)
 		return e
 
