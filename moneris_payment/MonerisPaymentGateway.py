@@ -38,9 +38,9 @@ class mpgHttpsPost:
 			response = responsePacket.read()
 
 			#print ("******\n Got response of: " + response + "\n******")
-		except urllib2.HTTPError, e:
+		except urllib2.HTTPError as e:
 			response = self.__GlobalError(e)
-		except urllib2.URLError, e:		     
+		except urllib2.URLError as e:		     
 			response = self.__GlobalError(e)
 		print(response)
 		self.__Response = mpgResponse(response)
