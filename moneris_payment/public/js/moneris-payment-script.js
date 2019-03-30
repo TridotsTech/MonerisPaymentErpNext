@@ -107,6 +107,7 @@ $(function() {
                         if(Response.message.status=="Completed")
                         {
                             $('.success').show();
+                               $(".submit-loading").hide();
                             setTimeout(function() {
                                 window.location.href = Response.message.redirect_to
                             }, 2000);
@@ -115,6 +116,7 @@ $(function() {
                         {
                              $(".error").html("<p>"+Response.message.Message+"</p>")
                               $(".error").show();
+                                 $(".submit-loading").hide();
                              setTimeout(function(){  $(".error").hide(); confirmButton.removeAttr("disabled")}, 3000);
                         }
                        }
