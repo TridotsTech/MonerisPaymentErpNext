@@ -239,6 +239,9 @@ class MonerisSettings(Document):
 		status = self.integration_request.status
 
 		if self.flags.status_changed_to == "Completed":
+			print('self.reference_doctype')
+			print(self.reference_doctype)
+			print( self.reference_docname)
 			if self.reference_doctype and self.reference_docname:
 				custom_redirect_to = None
 				try:
