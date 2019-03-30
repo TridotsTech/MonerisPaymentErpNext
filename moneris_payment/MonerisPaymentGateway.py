@@ -3,6 +3,7 @@ import frappe
 import frappe.utils
 # import urllib
 import urllib
+import urllib.request
 import xml.sax
 import socket
 from frappe import _
