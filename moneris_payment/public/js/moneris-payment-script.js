@@ -88,6 +88,7 @@ $(function() {
     }
     function moneris_make_payment()
     {
+        $(".submit-loading").show();
         var monerisdata={
                                     payment_request_id:$("#PaymentRequestId").val(),
                                     card_number:$("#card-number").val(),
@@ -114,7 +115,7 @@ $(function() {
                         {
                              $(".error").html("<p>"+Response.message.Message+"</p>")
                               $(".error").show();
-                             setTimeout(function(){  $(".error").hide(); }, 3000);
+                             setTimeout(function(){  $(".error").hide(); confirmButton.removeAttr("disabled")}, 3000);
                         }
                        }
                    });
