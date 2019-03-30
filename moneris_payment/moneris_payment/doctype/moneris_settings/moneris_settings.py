@@ -28,22 +28,20 @@ class MonerisSettings(Document):
 	def create_request(self, data):
 		try:
 			from moneris_payment.MonerisPaymentGateway  import Vault,PurchaseWithVault,mpgHttpsPost,CustInfo,BillingInfo,ShippingInfo,Item
-		
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
-
+			self.reference_doctype="Payment Request"
+			self.reference_docname=data.get('payment_request_id')
 			payment_request=frappe.get_doc("Payment Request", data.get('payment_request_id'))
 			sale_order=frappe.get_doc("Sales Order",payment_request.reference_name)
 			if sale_order:
-				self.reference_doctype="Sales Order"
-				self.reference_docname=sale_order.name
 				billing_info=frappe.get_doc("Address", sale_order.customer_address)
 				shipping_info=frappe.get_doc("Address", sale_order.shipping_address_name)
 				# customer_info=frappe.get_doc("Customer", sale_order.customer)
 				
 				sale_order_items=frappe.db.get_all("Sales Order Item",  fields=['item_code,item_name,rate,qty'], filters={'parent':sale_order.name},limit_page_length=1000)
-				order_id =payment_request.reference_name+datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+				order_id =payment_request.reference_name
 				print(sale_order.rounded_total)
 				amount = str(sale_order.rounded_total)
 				pan =data.get('card_number').replace(' ', '')
@@ -239,9 +237,6 @@ class MonerisSettings(Document):
 		status = self.integration_request.status
 
 		if self.flags.status_changed_to == "Completed":
-			print('self.reference_doctype')
-			print(self.reference_doctype)
-			print( self.reference_docname)
 			if self.reference_doctype and self.reference_docname:
 				custom_redirect_to = None
 				try:
