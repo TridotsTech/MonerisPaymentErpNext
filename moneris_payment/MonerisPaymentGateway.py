@@ -31,16 +31,16 @@ class mpgHttpsPost:
 		try:
 			#print ("Request URL is: [" + requestUrl + "]") 
 			#print ("Data to send : " + self.__data)
-			requestObj = urllib2.Request(requestUrl, self.__data)
+			requestObj = urllib3.Request(requestUrl, self.__data)
 			socket.setdefaulttimeout(self.__timeout)
 			requestObj.add_header("USER-AGENT", self.__agent)
-			responsePacket = urllib2.urlopen(requestObj)
+			responsePacket = urllib3.urlopen(requestObj)
 			response = responsePacket.read()
 
 			#print ("******\n Got response of: " + response + "\n******")
-		except urllib2.HTTPError as e:
+		except urllib3.HTTPError as e:
 			response = self.__GlobalError(e)
-		except urllib2.URLError as e:		     
+		except urllib3.URLError as e:		     
 			response = self.__GlobalError(e)
 		print(response)
 		self.__Response = mpgResponse(response)
@@ -66,10 +66,10 @@ class mpgHttpsPost:
 		return request
 
 	def __GlobalError(self, error):
-		if isinstance (error, urllib2.HTTPError):
+		if isinstance (error, urllib3.HTTPError):
 			errorNumber = error.code
 			errorMessage = "HttpError - " + str(errorNumber) 
-		elif isinstance (error, urllib2.URLError):
+		elif isinstance (error, urllib3.URLError):
 			errorNumber, errorMessage = error.reason
 			
 		errorResponse = '<?xml version="1.0" standalone="yes"?><response><receipt><ReceiptId>Global Error Receipt</ReceiptId><ReferenceNum>null</ReferenceNum><ResponseCode>null</ResponseCode><AuthCode>null</AuthCode><TransTime>null</TransTime><TransDate>null</TransDate><TransType>null</TransType><Complete>false</Complete><Message>' + '[' + str(errorNumber) + '] ' + errorMessage + '</Message><TransAmount>null</TransAmount><CardType>null</CardType><TransID>null</TransID><TimedOut>null</TimedOut><BankTotals>null</BankTotals><Ticket>null</Ticket><CorporateCard>false</CorporateCard></receipt></response>'
