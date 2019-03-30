@@ -32,11 +32,12 @@ class MonerisSettings(Document):
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
-			self.reference_doctype="Payment Request"
-			self.reference_docname=data.get('payment_request_id')
+
 			payment_request=frappe.get_doc("Payment Request", data.get('payment_request_id'))
 			sale_order=frappe.get_doc("Sales Order",payment_request.reference_name)
 			if sale_order:
+				self.reference_doctype="Sales Order"
+				self.reference_docname=sale_order.name
 				billing_info=frappe.get_doc("Address", sale_order.customer_address)
 				shipping_info=frappe.get_doc("Address", sale_order.shipping_address_name)
 				# customer_info=frappe.get_doc("Customer", sale_order.customer)
@@ -238,7 +239,7 @@ class MonerisSettings(Document):
 		status = self.integration_request.status
 
 		if self.flags.status_changed_to == "Completed":
-			if self.data.reference_doctype and self.reference_docname:
+			if self.reference_doctype and self.reference_docname:
 				custom_redirect_to = None
 				try:
 					custom_redirect_to = frappe.get_doc(self.reference_doctype,
