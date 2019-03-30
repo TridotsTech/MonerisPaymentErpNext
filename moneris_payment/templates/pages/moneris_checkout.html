@@ -32,8 +32,8 @@
 <h2 class="text-center" style="margin-top: 0;margin-bottom: 15px; float: left;">{{description}}</h2></div>
    
    <div class="col-md-12">
-    <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" checked="" value="exist">
-        <label>Pay with</label>
+    <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" id="existcard" checked="" value="exist">
+        <label for="existcard">Pay with</label>
     </div>
      <div id="existing-cards" style="{%if customercards | length == 0%}display:none{%endif%}">
        <ul>
@@ -59,8 +59,8 @@
     {%endfor%}
     </ul>
    </div> 
-     <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" value="new">
-        <label>New Card</label>
+     <div style="{%if customercards | length == 0%}display:none{%endif%}"><input type="radio" name="paymenttype" id="newcard" value="new">
+        <label for="newcard">New Card</label>
     </div>
     <form id="payment-form" style="{%if customercards | length >0%}display:none{%endif%}">
             <input type="hidden" value="{{order_id}}" id="PaymentRequestId">
