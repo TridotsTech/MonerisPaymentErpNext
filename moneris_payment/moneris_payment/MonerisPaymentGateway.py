@@ -44,6 +44,7 @@ class mpgHttpsPost:
 		# except urllib.error.URLError as e:		     
 		# 	response = self.__GlobalError(e)
 		except Exception as e:
+			print(e)
 			response = self.__GlobalError(e)
 		print(response)
 		self.__Response = mpgResponse(response)
