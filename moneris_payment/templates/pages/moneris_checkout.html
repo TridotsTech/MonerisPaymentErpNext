@@ -102,12 +102,7 @@
               
 
             </div>
-            <div class="error">
-
-            </div>
-             <div class="success">
-                {{ _("Your payment has been successfully registered.") }}
-            </div>
+         
             <button class="btn btn-sm btn-primary" id="confirm-purchase" type="submit" style="width:100%;font-size: 15px;">
                 {{_('Pay')}} {{amount}}</button>
             
@@ -117,6 +112,12 @@
 
 
     </div>
+       <div class="error">
+
+            </div>
+             <div class="success">
+                {{ _("Your payment has been successfully registered.") }}
+            </div>
 </div>
 <div class="submit-loading">
     <img src="/assets/moneris_payment/images/loading.gif" />
@@ -180,22 +181,28 @@ span.card-no, .card-exp {
 }
 .page-box
 {
-    margin: 70px auto;
+       margin: 70px auto;
     border: 1px solid #d1d8dd;
     padding: 15px;
     border-radius: 4px;
     background-color: #fff;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 .error
 {
     display: none;
-    color: red;
+       color: red;
+    margin: 70px auto;
+    width: 360px;
+    text-align: center;
 }
 .success
 {
     display: none;
-    margin-bottom: 15px;
+     margin: 70px auto;
+    width: 360px;
+    text-align: center;
     color: green;
 }
 .page-card-head

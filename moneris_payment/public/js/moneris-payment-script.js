@@ -149,7 +149,8 @@ $(function() {
                         {
                              $(".error").html("<p>"+Response.message.Message+"</p>")
                               $(".error").show();
-                             setTimeout(function(){    $(".submit-loading").hide(); $(".error").show(); }, 3000);
+                               $(".submit-loading").hide();
+                             setTimeout(function(){    $(".error").hide(); }, 3000);
                         }
                        }
                    });
