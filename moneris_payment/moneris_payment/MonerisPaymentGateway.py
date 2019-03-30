@@ -73,7 +73,8 @@ class mpgHttpsPost:
 		# 	errorNumber = error.code
 		# 	errorMessage = "HttpError - " + str(errorNumber) 
 		# elif isinstance (error, urllib.error.URLError):
-		errorNumber, errorMessage = str(error)
+		errorNumber=''
+		errorMessage = str(error)
 			
 		errorResponse = '<?xml version="1.0" standalone="yes"?><response><receipt><ReceiptId>Global Error Receipt</ReceiptId><ReferenceNum>null</ReferenceNum><ResponseCode>null</ResponseCode><AuthCode>null</AuthCode><TransTime>null</TransTime><TransDate>null</TransDate><TransType>null</TransType><Complete>false</Complete><Message>' + '[' + str(errorNumber) + '] ' + errorMessage + '</Message><TransAmount>null</TransAmount><CardType>null</CardType><TransID>null</TransID><TimedOut>null</TimedOut><BankTotals>null</BankTotals><Ticket>null</Ticket><CorporateCard>false</CorporateCard></receipt></response>'
 		return errorResponse
