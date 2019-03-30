@@ -17,7 +17,12 @@
 {%- block page_content -%}
 
 <div class="page-card" >
-    
+       <div class="error">
+
+            </div>
+             <div class="success">
+                {{ _("Your payment has been successfully registered.") }}
+            </div>
     <div class="col-sm-12 page-box">
         {% if image %}
             <img src={{image}}>
@@ -112,12 +117,7 @@
 
 
     </div>
-       <div class="error">
-
-            </div>
-             <div class="success">
-                {{ _("Your payment has been successfully registered.") }}
-            </div>
+    
 </div>
 <div class="submit-loading">
     <img src="/assets/moneris_payment/images/loading.gif" />
