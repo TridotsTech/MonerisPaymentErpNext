@@ -121,6 +121,7 @@ $(function() {
     }
     function moneris_make_payment_withvault(datakey)
     {
+        $(".submit-loading").show(); 
         var monerisdata={
                                     payment_request_id:$("#PaymentRequestId").val(),
                                     card_number:$("#card-number").val(),
@@ -138,7 +139,7 @@ $(function() {
                        callback: function(Response) {
                         if(Response.message.status=="Completed")
                         {
-                            if(Response.message.Complete=="")
+                            
                             $('.success').show();
                         $(".submit-loading").hide(); 
                             setTimeout(function() {
