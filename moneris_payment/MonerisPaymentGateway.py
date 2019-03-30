@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import frappe
 import frappe.utils
-import urllib3
+# import urllib
 import urllib
 import xml.sax
 import socket
@@ -32,10 +32,10 @@ class mpgHttpsPost:
 		try:
 			#print ("Request URL is: [" + requestUrl + "]") 
 			#print ("Data to send : " + self.__data)
-			requestObj = urllib3.Request(requestUrl, self.__data)
+			requestObj = urllib.Request(requestUrl, self.__data)
 			socket.setdefaulttimeout(self.__timeout)
 			requestObj.add_header("USER-AGENT", self.__agent)
-			responsePacket = urllib3.urlopen(requestObj)
+			responsePacket = urllib.urlopen(requestObj)
 			response = responsePacket.read()
 
 			#print ("******\n Got response of: " + response + "\n******")
