@@ -304,7 +304,7 @@ class mpgTransaction:
 		requestXml = "<" + self._Request + ">"
 		for index, tag in enumerate(self._order):
 			value = self._tags[tag]		 
-			if isinstance(value, basestring):
+			if isinstance(value, str):
 				requestXml = requestXml + "<" + tag + ">" + value + "</" + tag + ">"
 			elif isinstance(value, mpgTransaction):
 				requestXml = requestXml + value.toXml()
