@@ -2,8 +2,7 @@ from __future__ import unicode_literals
 import frappe
 import frappe.utils
 # import urllib
-import urllib
-import urllib.request
+import urllib.request as urllib
 import xml.sax
 import socket
 from frappe import _
