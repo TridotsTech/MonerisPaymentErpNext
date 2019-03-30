@@ -116,7 +116,9 @@ class MonerisSettings(Document):
 					valutResp = VautObject.getResponse()
 					if valutResp.getComplete()=="true":
 						data_key=valutResp.getDataKey()
-						frappe.get_doc({
+						CheckCardExist=frappe.db.get_all("Moneris Vault",  fields=['user_id,data_key,pan'], filters={'user_id':frappe.session.user,'pan':valutResp.getResMaskedPan(),'expiry':valutResp.getResExpdate(),},limit_page_length=1000)
+						if len(CheckCardExist)==0:
+							frappe.get_doc({
 										"doctype":"Moneris Vault",
 										"user_id":frappe.session.user,
 										"data_key":valutResp.getDataKey(),
