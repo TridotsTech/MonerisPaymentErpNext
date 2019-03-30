@@ -32,7 +32,6 @@ class MonerisSettings(Document):
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
-			print(data.get('reference_doctype'))
 			self.reference_doctype="Payment Request"
 			self.reference_docname=data.get('payment_request_id')
 			payment_request=frappe.get_doc("Payment Request", data.get('payment_request_id'))

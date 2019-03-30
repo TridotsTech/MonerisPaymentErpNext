@@ -36,8 +36,6 @@ def get_context(context):
 		context.reference_docname=frappe.form_dict['order_id']
 		context.customercards=frappe.db.get_all("Moneris Vault",fields={'*'},filters={"user_id":frappe.session.user},order_by="creation desc")
 		gateway_controller = get_gateway_controller(context.reference_doctype, context.reference_docname)
-		context.publishable_key = get_api_key(context.reference_docname, gateway_controller)
-		context.image = get_header_image(context.reference_docname, gateway_controller)
 
 		context['amount'] = fmt_money(amount=context['amount'], currency=context['currency'])
 
