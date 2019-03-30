@@ -325,7 +325,7 @@ class mpgTransaction:
 			
 		requestXml = requestXml + "</" + self._Request + ">"
 		return requestXml
-`
+
 class PurchaseWithVault(mpgTransaction):
 	def __init__(self, data_key,order_id, amount,crypt_type):
 		if country=="Canada":
