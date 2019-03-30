@@ -38,11 +38,11 @@ class mpgHttpsPost:
 			response = responsePacket.read()
 
 			#print ("******\n Got response of: " + response + "\n******")
-		except urllib3.HTTPError as e:
+		except urllib.error.HTTPError as e:
 			response = self.__GlobalError(e)
-		except urllib3.URLError as e:		     
+		except urllib.error.URLError as e:		     
 			response = self.__GlobalError(e)
-			
+		print(response)
 		self.__Response = mpgResponse(response)
 
 
@@ -66,10 +66,10 @@ class mpgHttpsPost:
 		return request
 
 	def __GlobalError(self, error):
-		if isinstance (error, urllib3.HTTPError):
+		if isinstance (error, urllib.error.HTTPError):
 			errorNumber = error.code
 			errorMessage = "HttpError - " + str(errorNumber) 
-		elif isinstance (error, urllib3.URLError):
+		elif isinstance (error, urllib.error.URLError):
 			errorNumber, errorMessage = error.reason
 			
 		errorResponse = '<?xml version="1.0" standalone="yes"?><response><receipt><ReceiptId>Global Error Receipt</ReceiptId><ReferenceNum>null</ReferenceNum><ResponseCode>null</ResponseCode><AuthCode>null</AuthCode><TransTime>null</TransTime><TransDate>null</TransDate><TransType>null</TransType><Complete>false</Complete><Message>' + '[' + str(errorNumber) + '] ' + errorMessage + '</Message><TransAmount>null</TransAmount><CardType>null</CardType><TransID>null</TransID><TimedOut>null</TimedOut><BankTotals>null</BankTotals><Ticket>null</Ticket><CorporateCard>false</CorporateCard></receipt></response>'
@@ -195,6 +195,15 @@ class mpgResponse (xml.sax.handler.ContentHandler):
 	def getReceiptId (self):
 		return self.__getProp("ReceiptId")
 
+	def getDataKey (self):
+		return self.__getProp("DataKey")
+
+	def getResExpdate (self):
+		return self.__getProp("expdate")
+
+	def getResMaskedPan (self):
+		return self.__getProp("masked_pan")
+
 	def getReferenceNum (self):
 		return self.__getProp("ReferenceNum")
 
@@ -294,6 +303,8 @@ class mpgResponse (xml.sax.handler.ContentHandler):
 	def getCorrectionAmount (self, ecr, cardType):
 		return self.__getCardTypeProp(ecr, cardType, "CorrectionAmount")
 
+
+
 class mpgTransaction:
 	def __init__(self):
 		self._Request = ""
@@ -313,8 +324,48 @@ class mpgTransaction:
 					requestXml = requestXml + item.toXml()
 			
 		requestXml = requestXml + "</" + self._Request + ">"
-
 		return requestXml
+
+class PurchaseWithVault(mpgTransaction):
+	def __init__(self, data_key,order_id, amount,crypt_type):
+		if country=="Canada":
+			self._Request = "res_purchase_cc"
+		else:
+			self._Request = "us_res_purchase_cc"
+		self._tags = {"data_key" : data_key ,"order_id" : order_id, "amount" : amount,  "crypt_type" : crypt_type, "cvd": None, "avs": None}
+		self._order = ["data_key","order_id", "amount", "crypt_type"]	    
+
+	def setCustId (self, cust_id):
+		self._tags["cust_id"] = cust_id
+		self._order.append("cust_id")
+	
+	def setCvdInfo (self, cvdInfo):
+		self._tags["cvd"] = cvdInfo
+		self._order.append("cvd")
+
+	def setAvsInfo (self, avsInfo):
+		self._tags["avs"] = avsInfo
+		self._order.append("avs")
+
+	def setCustInfo (self, custInfo):
+		self._tags["CustInfo"] = custInfo
+		self._order.append("CustInfo")
+
+	def setRecur (self, recur):
+		self._tags["recur"] = recur
+		self._order.append("recur")
+
+	def setCommcardInvoice (self, commcard_invoice):
+		self._tags["commcard_invoice"] = commcard_invoice
+		self._order.append("commcard_invoice")
+
+	def setCommcardTaxAmount (self, commcard_tax_amount):
+		self._tags["commcard_tax_amount"] = commcard_tax_amount
+		self._order.append("commcard_tax_amount")
+
+	def setDynamicDescriptor (self, dynamic_descriptor):
+		self._tags["dynamic_descriptor"] = dynamic_descriptor
+		self._order.append("dynamic_descriptor")
 
 class Purchase(mpgTransaction):
 	def __init__(self, order_id, amount, pan, expdate, crypt_type):
@@ -356,6 +407,17 @@ class Purchase(mpgTransaction):
 	def setDynamicDescriptor (self, dynamic_descriptor):
 		self._tags["dynamic_descriptor"] = dynamic_descriptor
 		self._order.append("dynamic_descriptor")
+
+class Vault(mpgTransaction):
+	def __init__(self, pan ,expdate , phone , email , cust_id ,crypt_type):
+		if country=="Canada":
+			self._Request = "res_add_cc"
+		else:
+			self._Request = "us_res_add_cc"
+		self._tags = {"pan" : pan ,"expdate" : expdate, "phone" : phone, "email" : email, "cust_id" : cust_id, "crypt_type" : crypt_type}
+		self._order = ["pan", "expdate","phone","email","cust_id", "crypt_type"]
+
+
 
 class Preauth(mpgTransaction):
 	def __init__(self, order_id, amount, pan, expdate, crypt_type):
