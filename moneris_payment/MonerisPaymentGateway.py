@@ -32,7 +32,7 @@ class mpgHttpsPost:
 		try:
 			#print ("Request URL is: [" + requestUrl + "]") 
 			#print ("Data to send : " + self.__data)
-			requestObj = urllib.Request(requestUrl, self.__data)
+			requestObj = urllib.Request(requestUrl, self.__data.encode("utf-8"))
 			socket.setdefaulttimeout(self.__timeout)
 			requestObj.add_header("USER-AGENT", self.__agent)
 			responsePacket = urllib.urlopen(requestObj)
@@ -320,7 +320,7 @@ class mpgTransaction:
 		requestXml = "<" + self._Request + ">"
 		for index, tag in enumerate(self._order):
 			value = self._tags[tag]		 
-			if isinstance(value, unicode):
+			if isinstance(value, str):
 				requestXml = requestXml + "<" + tag + ">" + value + "</" + tag + ">"
 			elif isinstance(value, mpgTransaction):
 				requestXml = requestXml + value.toXml()
