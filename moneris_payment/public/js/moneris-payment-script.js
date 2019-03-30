@@ -117,7 +117,7 @@ $(function() {
                              $(".error").html("<p>"+Response.message.Message+"</p>")
                               $(".error").show();
                                  $(".submit-loading").hide();
-                             setTimeout(function(){  $(".error").hide(); confirmButton.removeAttr("disabled")}, 3000);
+                             setTimeout(function(){  $(".error").hide(); $('#confirm-purchase').removeAttr("disabled")}, 3000);
                         }
                        }
                    });
