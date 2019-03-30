@@ -43,7 +43,7 @@ class MonerisSettings(Document):
 				# customer_info=frappe.get_doc("Customer", sale_order.customer)
 				
 				sale_order_items=frappe.db.get_all("Sales Order Item",  fields=['item_code,item_name,rate,qty'], filters={'parent':sale_order.name},limit_page_length=1000)
-				order_id =payment_request.reference_name
+				order_id =payment_request.reference_name+datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 				print(sale_order.rounded_total)
 				amount = str(sale_order.rounded_total)
 				pan =data.get('card_number').replace(' ', '')
