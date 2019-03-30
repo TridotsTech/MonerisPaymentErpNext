@@ -27,7 +27,7 @@ class MonerisSettings(Document):
 
 	def create_request(self, data):
 		try:
-			from moneris_payment.MonerisPaymentGateway  import Vault,PurchaseWithVault,mpgHttpsPost,CustInfo,BillingInfo,ShippingInfo
+			from moneris_payment.MonerisPaymentGateway  import Vault,PurchaseWithVault,mpgHttpsPost,CustInfo,BillingInfo,ShippingInfo,Item
 			self.data= json.loads(data)
 			self.integration_request = create_request_log(self.data, "Host", "Moneris")
 			data = json.loads(data)
@@ -205,7 +205,7 @@ class MonerisSettings(Document):
 	
 
 	def refund_payment(self,sales_invoice_id,total_amount):
-		from moneris_payment.MonerisPaymentGateway  import Refund,CustInfo
+		from moneris_payment.MonerisPaymentGateway  import Refund,CustInfo,mpgHttpsPost
 		moneris_transaction=frappe.db.get_all("Moneris Transactions",  fields=['*'], filters={'sales_invoice_reference':sales_invoice_id},limit_page_length=1)
 		if moneris_transaction:
 			if len(moneris_transaction)>0:
