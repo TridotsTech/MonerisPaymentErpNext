@@ -172,7 +172,7 @@ def get_context(context):
 # 		return e
 
 @frappe.whitelist(allow_guest=True)
-def make_payment(data,reference_doctype,reference_docname):
+def make_payment(data,reference_doctype=None, reference_docname=None):
 	try:
 		gateway_controller = get_gateway_controller(reference_doctype,reference_docname)
 		data =  frappe.get_doc("Moneris Settings", gateway_controller).create_request(data)
