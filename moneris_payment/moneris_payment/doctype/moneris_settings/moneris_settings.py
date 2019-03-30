@@ -25,7 +25,7 @@ class MonerisSettings(Document):
 	def on_update(self):
 		create_payment_gateway('Moneris')
 
-	def create_request(self, data):
+	def create_request(self, data,):
 		try:
 			from moneris_payment.MonerisPaymentGateway  import Vault,PurchaseWithVault,mpgHttpsPost,CustInfo,BillingInfo,ShippingInfo,Item
 			self.data= json.loads(data)
@@ -237,11 +237,11 @@ class MonerisSettings(Document):
 		status = self.integration_request.status
 
 		if self.flags.status_changed_to == "Completed":
-			if self.reference_doctype and self.reference_docname:
+			if self.data.reference_doctype and self.data.reference_docname:
 				custom_redirect_to = None
 				try:
 					custom_redirect_to = frappe.get_doc(self.reference_doctype,
-						self.reference_docname).run_method("on_payment_authorized", self.flags.status_changed_to)
+						self.data.reference_docname).run_method("on_payment_authorized", self.flags.status_changed_to)
 					sales_invoice=frappe.db.sql("""select PR.reference_name,PR.reference_doctype from `tabPayment Entry` PE inner join `tabPayment Entry Reference` PR on PE.name=PR.parent where PE.reference_no=%(payment_request_id)s""".format(),{'payment_request_id':payment_request_id}, as_dict=1)
 					if sales_invoice:
 						if len(sales_invoice)>0:
