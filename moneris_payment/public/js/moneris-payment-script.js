@@ -138,7 +138,9 @@ $(function() {
                        callback: function(Response) {
                         if(Response.message.status=="Completed")
                         {
+                            if(Response.message.Complete=="")
                             $('.success').show();
+                        $(".submit-loading").hide(); 
                             setTimeout(function() {
                                 window.location.href = Response.message.redirect_to
                             }, 2000);
@@ -147,7 +149,7 @@ $(function() {
                         {
                              $(".error").html("<p>"+Response.message.Message+"</p>")
                               $(".error").show();
-                             setTimeout(function(){  $(".error").hide(); }, 3000);
+                             setTimeout(function(){    $(".submit-loading").hide(); $(".error").show(); }, 3000);
                         }
                        }
                    });

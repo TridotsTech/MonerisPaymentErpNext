@@ -39,7 +39,6 @@ class MonerisSettings(Document):
 				billing_info=frappe.get_doc("Address", sale_order.customer_address)
 				shipping_info=frappe.get_doc("Address", sale_order.shipping_address_name)
 				# customer_info=frappe.get_doc("Customer", sale_order.customer)
-				
 				sale_order_items=frappe.db.get_all("Sales Order Item",  fields=['item_code,item_name,rate,qty'], filters={'parent':sale_order.name},limit_page_length=1000)
 				order_id =payment_request.reference_name
 				print(sale_order.rounded_total)
